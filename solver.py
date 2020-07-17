@@ -1,3 +1,5 @@
+import random
+
 grid2 = [
     [0, 0, 0, 5, 7, 0, 0, 0, 0],
     [0, 0, 0, 9, 0, 3, 0, 4, 0],
@@ -44,26 +46,26 @@ def empty(board):
         for j in range(len(board[0])):
             if board[i][j] == 0:
                 return (i, j)
-    return None
+    return False
+
 
 def valid(board, position, number):
     ''' Checks if it is valid to input a number into chosen position of current grid '''
-    square = empty(board)
     
     for i in range(len(board)):
-        if board[square[0]][i] == number and board[square[1]] != i:
+        if board[position[0]][i] == number and board[position[1]] != i:
             return False
 
     for i in range(len(board[0])):
-        if board[i][square[1]] == number and board[square[0]] != i:
+        if board[i][position[1]] == number and board[position[0]] != i:
             return False
 
-    box_column = square[1] // 3
-    box_row = square[0] // 3
+    box_column = position[1] // 3
+    box_row = position[0] // 3
 
     for i in range(box_row * 3, box_row * 3 + 3):
         for j in range(box_column * 3, box_column * 3 + 3):
-            if board[i][j] == number and (i,j) != square:
+            if board[i][j] == number and (i,j) != position:
                 return False
     
     return True
@@ -72,21 +74,21 @@ def solve(board):
     ''' Uses backtracking to solve the sudoku puzzle '''
 
     if not empty(board):
-        return True
+        return board
     else:
         row, column = empty(board)
-
-    for i in range(1,10):
+    l = list(range(1,10))
+    random.shuffle(l)
+    for i in l:
         if valid(board, (row, column), i):
             board[row][column] = i
 
             if solve(board):
-                return True
+                return board
 
             board[row][column] = 0
 
     return False
-
 
 
 print_board(grid)
