@@ -25,25 +25,26 @@ def cell(board):
 
 def remove(position, board):
     ''' Removes current number on given position of grid '''
-    value = board[position[0]][position[1]]
     board[position[0]][position[1]] = 0
-    print(board)
-    return board, value
+    return board
+
 
 def main():
     ''' Returns final puzzle to player '''
     puzzle = fill_board()
+    print(puzzle)
     givens = 81
-    done = False
-    while (not done) and givens >= 17:
+    while givens > 28:
         pos = cell(puzzle)
-        puzzle, value = remove(pos, puzzle)
-        if solver.solve(puzzle) == False:
-            puzzle[pos[0]][pos[1]] = value
-            givens += 1
+        puzzle = remove(pos, puzzle)
         givens -= 1
 
-    print(puzzle)
+    print(givens)
+
     return puzzle
 
-main()
+puzzle = main()
+solver.print_board(puzzle)
+solver.solve(puzzle)
+print()
+solver.print_board(puzzle)

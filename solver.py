@@ -87,4 +87,3 @@ def solve(board):
             board[row][column] = 0
 
     return False
-
