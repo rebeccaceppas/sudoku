@@ -51,7 +51,6 @@ def empty(board):
 
 def valid(board, position, number):
     ''' Checks if it is valid to input a number into chosen position of current grid '''
-    
     for i in range(len(board)):
         if board[position[0]][i] == number and board[position[1]] != i:
             return False
@@ -71,8 +70,7 @@ def valid(board, position, number):
     return True
 
 def solve(board):
-    ''' Uses backtracking to solve the sudoku puzzle '''
-
+    ''' Returns solved puzzle, using backtracking '''
     if not empty(board):
         return board
     else:
@@ -90,8 +88,3 @@ def solve(board):
 
     return False
 
-
-print_board(grid)
-solve(grid)
-print('\n The solution is: \n ')
-print_board(grid)
