@@ -1,7 +1,8 @@
 import solver
 import random
+import copy
 
-counter = 0
+#counter = 0
 
 def starting(dimension=9):
     ''' Returns empty grid of given dimension '''
@@ -30,94 +31,48 @@ def remove(position, board):
     board[position[0]][position[1]] = 0
     return board
 
-""" def solutions(board):
-    ''' Counts number of solutions for puzzle '''
-    global counter
-    if not solver.empty(board):
-        counter += 1
-    else:
-        pos = solver.empty(board)
-    l = list(range(1,10))
-    random.shuffle(l)
-    for i in l:
-        if solver.valid(board, pos, i):
-            board[pos[0]][pos[1]] = i
-
-            if solutions(board):
-                return True
-
-            board[pos[0]][pos[1]] = 0
-
-    return False """
-
-def solutions(board, position):
-    ''' Counts number of solutions for puzzle '''
-    global counter
-    if not solver.empty(board):
-        counter += 1
-        return
-    l = list(range(1,10))
-    random.shuffle(l)
-    for i in l:
-        if solver.valid(board, position, i):
-            board[position[0]][position[1]] = i
-
-            if solutions(board, position):
-                return True
-
-            board[position[0]][position[1]] = 0
-
-    return False
-
-""" def main():
+def generate():
     ''' Returns final puzzle to player '''
     puzzle = fill_board()
+    complete = copy.deepcopy(puzzle)
+    print('\nThis is the full puzzle: \n')
     print(puzzle)
+    print('this is complete')
+    print(complete)
     givens = 81
     while givens > 28:
         pos = cell(puzzle)
         puzzle = remove(pos, puzzle)
         givens -= 1
+    print('after func')
+    print(puzzle)
+    print(complete)
+    return puzzle, complete
 
-    print(givens)
-
-    return puzzle
-
-puzzle = main()
-solver.print_board(puzzle)
-solver.solve(puzzle)
-print()
-solver.print_board(puzzle) """
 
 def main():
+    saved_puzzle = list()
+    puzzle, complete = generate()
+    saved_puzzle = copy.deepcopy(puzzle)
+    print('\n this is saved puzzle\n ')
+    print(saved_puzzle)
+    print('\n this is complete puzzle\n')
+    print(complete)
+    result = solver.solve(puzzle)
+    times = 0
+    while complete != result:
+        puzzle, complete = generate()
+        saved_puzzle = copy.deepcopy(puzzle)
+        solver.print_board(puzzle)
+        result = solver.solve(puzzle)
+        times += 1
 
-    puzzle = fill_board()
-    attempts = 5
-
-    while attempts > 0:
-        pos = cell(puzzle)
-        value = puzzle[pos[0]][pos[1]]
-        puzzle = remove(pos, puzzle)
-        print('\nThis is the puzzle at this stage: \n', puzzle)
-
-        copy_puzzle = []
-        for r in range(0, 9):
-            copy_puzzle.append([])
-            for c in range(0, 9):
-                copy_puzzle[r].append(puzzle[r][c])
-
-        solutions(copy_puzzle, pos)
-        print('\nThe counter is: ', counter)
-        if counter != 1:
-            puzzle[pos[0]][pos[1]] = value
-            attempts -= 1
-
-    return puzzle
+    print('\n This is the solved puzzle: \n')
+    print(times)
+    solver.print_board(saved_puzzle)
+    print()
+    
+    return saved_puzzle
 
 
 main()
-""" solver.print_board(puzzle)
-solver.solve(puzzle)
-print()
-solver.print_board(puzzle) """
-
