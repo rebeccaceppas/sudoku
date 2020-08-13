@@ -1,6 +1,5 @@
 import solver
 import random
-import copy
 
 #counter = 0
 
@@ -34,17 +33,12 @@ def remove(position, board):
 def generate():
     ''' Returns final puzzle to player '''
     puzzle = fill_board()
-    complete = copy.deepcopy(puzzle)
-    print('\nThis is the full puzzle: \n')
-    print(puzzle)
-    print('this is complete')
-    print(complete)
+    complete = [ x[:] for x in puzzle ]
     givens = 81
     while givens > 28:
         pos = cell(puzzle)
         puzzle = remove(pos, puzzle)
         givens -= 1
-    print('after func')
     print(puzzle)
     print(complete)
     return puzzle, complete
@@ -53,22 +47,22 @@ def generate():
 def main():
     saved_puzzle = list()
     puzzle, complete = generate()
-    saved_puzzle = copy.deepcopy(puzzle)
+    saved_puzzle = complete = [ x[:] for x in puzzle ]
     print('\n this is saved puzzle\n ')
     print(saved_puzzle)
     print('\n this is complete puzzle\n')
     print(complete)
     result = solver.solve(puzzle)
-    times = 0
+    attempt = 0
     while complete != result:
         puzzle, complete = generate()
-        saved_puzzle = copy.deepcopy(puzzle)
+        saved_puzzle = complete = [ x[:] for x in puzzle ]
         solver.print_board(puzzle)
         result = solver.solve(puzzle)
-        times += 1
+        attempt += 1
+        print(attempt)
 
     print('\n This is the solved puzzle: \n')
-    print(times)
     solver.print_board(saved_puzzle)
     print()
     
